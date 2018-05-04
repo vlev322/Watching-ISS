@@ -1,57 +1,67 @@
 var url = "http://api.open-notify.org/iss-now.json";
-var pLong = document.getElementById('long');
-var pLat = document.getElementById('lat');
+var pLong = document.getElementById("long");
+var pLat = document.getElementById("lat");
 
 var request = new XMLHttpRequest();
+var _myMap, _marker;
 
-function test () {
-	request.open('GET', url, true);
+function test() {
+	request.open("GET", url, true);
 
 	request.onload = function () {
 		if (request.status >= 200 && request.status < 400) {
 			var data = JSON.parse(request.responseText);
-				latitude = data['iss_position']['latitude'];
-				longitude = data['iss_position']['longitude'];
-				
-			pLong.innerHTML = "Longitude is: " + data['iss_position']['longitude'];
-			pLat.innerHTML = "Latitude is: " + data['iss_position']['latitude'];
+			latitude = data["iss_position"]["latitude"];
+			longitude = data["iss_position"]["longitude"];
 
+			pLong.innerHTML = "Longitude is: " + data["iss_position"]["longitude"];
+			pLat.innerHTML = "Latitude is: " + data["iss_position"]["latitude"];
+		
+			if (_marker && _marker.setPosition) {
+				var latlng = new google.maps.LatLng(
+					data["iss_position"]["latitude"],
+					data["iss_position"]["longitude"]
+				);
+				_myMap.setCenter(latlng);
+				_marker.setPosition(latlng);
+			}
 		} else {
 			console.log("Target server returned an error");
 		}
 	};
 	request.send();
 }
-var timerId = setInterval(test, 1000);
+var timerId = setInterval(test, 5000);
 
 //---------- MAP ---------------------------
-var lon = 30.52, latt = 50.2
+var lon = 30.52, latt = 50.2;
 
-	function initMap(params) {
-		var pos = { lat: latt, lng: lon}
-			var element = document.getElementById('map');
-			var options = {
-					zoom: 5,
-				center: { lat: latt, lng: lon }
-			};
+function initMap(params) {
+	var pos = { lat: latt, lng: lon };
+	var element = document.getElementById("map");
+	var options = {
+		zoom: 4,
+		center: { lat: latt, lng: lon }
+	};
 
-			var myMap = new google.maps.Map(element, options);
+	_myMap = new google.maps.Map(element, options);;
 
-		addMarker({ lat: latt, lng: lon });
-			
-			function addMarker(coordinates) {
-				var marker = new google.maps.Marker({
-						position: coordinates,
-						map: myMap,
-						icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-				});				
-			}
+	addMarker({ lat: latt, lng: lon });
 
-			var InfoWindow = new google.maps.InfoWindow({
-				content: '<h2>We here!</h2>'
-			});
+	function addMarker(coordinates) {
+		_marker = new google.maps.Marker({
+			position: coordinates,
+			map: _myMap,
+			icon:
+				"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
+		});
 
-			marker.addListener('click', function(){
-				InfoWindow.open(myMap, marker);
-			})
-		}
+		_marker.addListener("click", function () {
+			InfoWindow.open(_myMap, marker);
+		});
+	}
+
+	var InfoWindow = new google.maps.InfoWindow({
+		content: "<h2>We here!</h2>"
+	});
+}
