@@ -1,27 +1,3 @@
-// var request = require('request')
-// 	, JSONStream = require('JSONStream')
-// 	, es = require('event-stream')
-// 	, XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
-// 	var latitude, longitude;
-
-// var request = new XMLHttpRequest();
-// request.open('GET', 'http://api.open-notify.org/iss-now.json');
-// request.onreadystatechange = function (e) {
-// 	if (this.readyState = 4) {
-// 		if (this.status == 200) {
-// 			var response = JSON.parse(this.responseText);
-			
-// 			latitude = response['iss_position']['latitude'];
-// 			longitude = response['iss_position']['longitude'];
-			
-// 			console.log(latitude);
-			
-
-// 		}	
-// 	}
-// }
-// request.send();
 var url = "http://api.open-notify.org/iss-now.json";
 var pLong = document.getElementById('long');
 var pLat = document.getElementById('lat');
@@ -46,10 +22,36 @@ function test () {
 	};
 	request.send();
 }
-
-
 var timerId = setInterval(test, 1000);
 
+//---------- MAP ---------------------------
+var lon = 30.52, latt = 50.2
 
+	function initMap(params) {
+		var pos = { lat: latt, lng: lon}
+			var element = document.getElementById('map');
+			var options = {
+					zoom: 5,
+				center: { lat: latt, lng: lon }
+			};
 
+			var myMap = new google.maps.Map(element, options);
 
+		addMarker({ lat: latt, lng: lon });
+			
+			function addMarker(coordinates) {
+				var marker = new google.maps.Marker({
+						position: coordinates,
+						map: myMap,
+						icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+				});				
+			}
+
+			var InfoWindow = new google.maps.InfoWindow({
+				content: '<h2>We here!</h2>'
+			});
+
+			marker.addListener('click', function(){
+				InfoWindow.open(myMap, marker);
+			})
+		}
