@@ -1,6 +1,11 @@
 var url = "http://api.open-notify.org/iss-now.json";
+var url2 = "http://api.open-notify.org/astros.json";
+
 var pLong = document.getElementById("long");
 var pLat = document.getElementById("lat");
+var name = document.getElementById("name");
+var number = document.getElementById("number");
+var divPeople = document.getElementById('peopleOnIss');
 
 var request = new XMLHttpRequest();
 var _myMap, _marker;
@@ -33,7 +38,8 @@ function test() {
 }
 var timerId = setInterval(test, 5000);
 
-//---------- MAP ---------------------------
+//---------- MAP`s options ---------------------------
+
 var lon = 30.52, latt = 50.2;
 
 function initMap(params) {
@@ -65,3 +71,34 @@ function initMap(params) {
 		content: "<h2>We here!</h2>"
 	});
 }
+
+//---------- Who is on board iss? ---------------------------
+
+request.open("GET", url2, true);
+
+request.onload = function () {
+	if (request.status >= 200 && request.status < 400) {
+		var arrInfo = JSON.parse(request.responseText);
+//----Names
+		function getValue(array) {
+			for (i = 0; i < array.length; i++) {
+				if (array[i].name) {
+					var p = document.createElement("p");
+					p.textContent = array[i].name;
+					divPeople.appendChild(p);
+				}
+			}
+		}
+		getValue(arrInfo["people"]);
+//-----Number
+		var pNum = document.createElement("p");
+		pNum.textContent = arrInfo["number"];
+		divPeople.appendChild(pNum);	
+		console.log(arrInfo["number"]);
+		
+		// name.innerHTML = "Name is: " + data2["people"]["name"];
+	} else {
+		console.log("Target server returned an error");
+	}
+};
+request.send();
