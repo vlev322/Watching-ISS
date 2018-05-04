@@ -6,6 +6,7 @@ var pLat = document.getElementById("lat");
 var name = document.getElementById("name");
 var number = document.getElementById("number");
 var divPeople = document.getElementById('peopleOnIss');
+var time = document.getElementById('time');
 
 var request = new XMLHttpRequest();
 var _myMap, _marker;
@@ -18,10 +19,15 @@ function test() {
 			var data = JSON.parse(request.responseText);
 			latitude = data["iss_position"]["latitude"];
 			longitude = data["iss_position"]["longitude"];
-
+//----coordinates
 			pLong.innerHTML = "Longitude is: " + data["iss_position"]["longitude"];
 			pLat.innerHTML = "Latitude is: " + data["iss_position"]["latitude"];
-		
+//----time
+			var timeNow = new Date();
+			
+			time.innerHTML = timeNow.toUTCString();
+
+//----change coordinates		
 			if (_marker && _marker.setPosition) {
 				var latlng = new google.maps.LatLng(
 					data["iss_position"]["latitude"],
@@ -46,7 +52,7 @@ function initMap(params) {
 	var pos = { lat: latt, lng: lon };
 	var element = document.getElementById("map");
 	var options = {
-		zoom: 4,
+		zoom: 3,
 		center: { lat: latt, lng: lon }
 	};
 
@@ -90,13 +96,11 @@ request.onload = function () {
 			}
 		}
 		getValue(arrInfo["people"]);
-//-----Number
-		var pNum = document.createElement("p");
-		pNum.textContent = arrInfo["number"];
-		divPeople.appendChild(pNum);	
-		console.log(arrInfo["number"]);
-		
-		// name.innerHTML = "Name is: " + data2["people"]["name"];
+//----Number
+		var pNum = document.createElement("span");
+		pNum.textContent = "Total amount: " +  arrInfo["number"] + " people on ISS" ;
+		divPeople.appendChild(pNum);
+
 	} else {
 		console.log("Target server returned an error");
 	}

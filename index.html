@@ -3,27 +3,33 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>MCS</title>
+	<title>Watching ISS</title>
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="css/fontawesome-all.css">
+
 </head>
 
-<body>	
-	<div class="rates">
+<body>
+
+	<div class="rates header">
+		<h1>ISS is now located at:</h1>
 		<p id="long"></p>
 		<p id="lat"></p>
 	</div>
-
-	<h3>My Maps</h3>
-	<div id="map" style="width: 100%; height: 600px;"></div>
-
-	<div id="peopleOnIss">
-		<p id="number"></p>
-		<p id="name"></p>
+	<div class="topSideBar">
+		<strong>Current UTC time:</strong>
+		<p id="time"></p>		
+	</div>
+	<div id="map"></div>
+<div class="clear"></div>
+	<div id="peopleOnIss" class="sidebar">
+		
 	</div>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_vsGGBu3mD9ktOc5CUivhP2IZi4ezmpI&callback=initMap">
-</script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_vsGGBu3mD9ktOc5CUivhP2IZi4ezmpI&callback=initMap">
+	</script>
 
-<script src="js/index.js"></script>
+	<script src="js/index.js"></script>
 </body>
 
 </html>
